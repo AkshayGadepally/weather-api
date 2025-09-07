@@ -24,10 +24,10 @@ public class ForecastResponse {
         @JsonProperty("forecastday")
         private List<ForecastDay> forecastday;
 
-        public List<ForecastDay> getDays(){
+        public List<ForecastDay> getForecastday(){
             return forecastday;
         }
-        public void setDay(List<ForecastDay> forecastday){
+        public void setForecastday(List<ForecastDay> forecastday){
             this.forecastday = forecastday;
         }
     }
@@ -46,7 +46,7 @@ public class ForecastResponse {
         public Day getDay(){
             return day;
         }
-        public void setDay(){
+        public void setDay(Day day){
             this.day = day;
         }
     }

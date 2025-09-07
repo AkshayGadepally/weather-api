@@ -38,7 +38,7 @@ public class WeatherController {
     //Getting Weather Forecast
     @GetMapping("/forecast")
     public Object getForecast(@RequestParam String city, @RequestParam(defaultValue = "3") int days){
-        String url =String.format("%s?key=%s&q=%s&days=%d&api=no&alerts=no", CURRENT_WEATHER_URL, apiKey, city, days);
+        String url =String.format("%s?key=%s&q=%s&days=%d&api=no&alerts=no", FORECAST_URL, apiKey, city, days);
         try{
             ForecastResponse forecastResponse = restTemplate.getForObject(url , ForecastResponse.class);
             return forecastResponse;
