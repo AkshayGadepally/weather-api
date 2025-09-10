@@ -1,13 +1,19 @@
 package com.Akshay.weather_api;
 
-import com.Akshay.weather_api.WeatherResponse;
-import com.Akshay.weather_api.ForecastResponse;
+
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.client.RestTemplate;
+
+
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/weather")
@@ -17,38 +23,52 @@ public class WeatherController {
     @Value("${weather.api.key}")
     private String apiKey;
 
-    //Weatherapi endpoints
-    private final String CURRENT_WEATHER_URL="http://api.weatherapi.com/v1/current.json";
+    public final String CURRENT_WEATHER_URL="http://api.weatherapi.com/v1/current.json";
     private final String FORECAST_URL="http://api.weatherapi.com/v1/forecast.json";
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    private WeatherService weatherService;
 
     //Getting Current weather
     @GetMapping("/current")
-    public Object getCurrentWeather(@RequestParam String city){
+    public ResponseEntity<?> getCurrentWeather(@RequestParam String city, HttpServletRequest request){
+
         String url = String.format("%s?key=%s&q=%s&aqi=no", CURRENT_WEATHER_URL, apiKey, city);
         try{
-            WeatherResponse weatherResponse = restTemplate.getForObject(url , WeatherResponse.class);
-            return weatherResponse;
+            WeatherResponse weatherResponse = weatherService.getCurrentWeather(url , request);
+            return ResponseEntity.ok(weatherResponse);
         } catch(Exception e){
-            return "{\"error\":\"Could not get weather for "+ city+ "\"}";
+            Map<String, String> error =  new HashMap<>();
+            error.put("ERROR:", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
 
     //Getting Weather Forecast
     @GetMapping("/forecast")
-    public Object getForecast(@RequestParam String city, @RequestParam(defaultValue = "3") int days){
+    public ResponseEntity<?> getForecast(@RequestParam String city, @RequestParam(defaultValue = "3") int days, HttpServletRequest request){
         String url =String.format("%s?key=%s&q=%s&days=%d&api=no&alerts=no", FORECAST_URL, apiKey, city, days);
+
         try{
-            ForecastResponse forecastResponse = restTemplate.getForObject(url , ForecastResponse.class);
-            return forecastResponse;
+            if(days<1 || days>10){
+                Map<String,String> error = new HashMap<>();
+                error.put("ERROR:","The number of days have to between 1 and 10");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+            }
+            ForecastResponse forecastResponse = weatherService.getForecastWeather(url , request);
+            return ResponseEntity.ok(forecastResponse);
         }catch(Exception e){
-            return "Error getting forecast data:" +e.getMessage();
+            Map<String, String> error = new HashMap<>();
+            error.put("ERROR:", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
 
     @GetMapping("/test")
-    public String test(){
-        return "Weather api is working";
+    public ResponseEntity<Map<String, String>> test(){
+        Map<String, String> response = new HashMap<>();
+        response.put("message","Weather API is Working with PostgreSQL logging!");
+        response.put("Status","Success");
+        return ResponseEntity.ok(response);
     }
 }
