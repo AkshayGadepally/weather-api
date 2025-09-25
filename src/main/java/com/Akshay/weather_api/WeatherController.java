@@ -35,7 +35,7 @@ public class WeatherController {
 
         String url = String.format("%s?key=%s&q=%s&aqi=no", CURRENT_WEATHER_URL, apiKey, city);
         try{
-            WeatherResponse weatherResponse = weatherService.getCurrentWeather(url , request);
+            WeatherResponse weatherResponse = weatherService.getCurrentWeather(url);
             return ResponseEntity.ok(weatherResponse);
         } catch(Exception e){
             Map<String, String> error =  new HashMap<>();
@@ -55,7 +55,7 @@ public class WeatherController {
                 error.put("ERROR:","The number of days have to between 1 and 10");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
             }
-            ForecastResponse forecastResponse = weatherService.getForecastWeather(url , request);
+            ForecastResponse forecastResponse = weatherService.getForecastWeather(url);
             return ResponseEntity.ok(forecastResponse);
         }catch(Exception e){
             Map<String, String> error = new HashMap<>();

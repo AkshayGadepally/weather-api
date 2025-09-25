@@ -1,7 +1,7 @@
 package com.Akshay.weather_api;
 
 import org.springframework.stereotype.Service;
-import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
@@ -19,11 +19,11 @@ class WeatherService {
     @Autowired
     private RequestLogRepository requestLogRepository;
 
-    public WeatherResponse getCurrentWeather(String city, HttpServletRequest request){
+    public WeatherResponse getCurrentWeather(String city){
         long startTime = System.currentTimeMillis();
-        String ipAddress = getClientIpAddress(request);
 
-        RequestLog log = new RequestLog(city, "api/weather/current/", ipAddress);
+
+        RequestLog log = new RequestLog(city, "api/weather/current/", "localhost");
 
         try{
             String url = String.format("%s?key=%s&q=%s", CURRENT_WEATHER_URL, apiKey, city);
@@ -45,11 +45,11 @@ class WeatherService {
         }
     }
 
-    public ForecastResponse getForecastWeather(String city, HttpServletRequest request){
+    public ForecastResponse getForecastWeather(String city){
         long startTime = System.currentTimeMillis();
-        String ipAddress = getClientIpAddress(request);
 
-        RequestLog log = new RequestLog(city, "api/weather/forecast", ipAddress);
+
+        RequestLog log = new RequestLog(city, "api/weather/forecast", "localhost");
 
         try{
             String url = String.format("%s?key=%s&q=%s",FORECAST_URL, apiKey,city);
