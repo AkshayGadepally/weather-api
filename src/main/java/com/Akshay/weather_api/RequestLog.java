@@ -1,15 +1,12 @@
 package com.Akshay.weather_api;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
-
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "request_logs")
 public class RequestLog {
 
-    @jakarta.persistence.Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
