@@ -12,7 +12,7 @@ class WeatherService {
     private String apiKey;
 
     private final String CURRENT_WEATHER_URL = "http://api.weatherapi.com/v1/current.json";
-    private final String FORECAST_URL = "http://api.weather.com/v1/forecast.json";
+    private final String FORECAST_URL = "http://api.weatherapi.com/v1/forecast.json";
 
     private final RestTemplate restTemplate = new RestTemplate();
 
