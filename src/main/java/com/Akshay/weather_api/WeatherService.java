@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.cache.annotation.Cacheable;
 
 @Service
 class WeatherService {
+
     @Value("${weather.api.key}")
     private String apiKey;
 
@@ -19,6 +21,7 @@ class WeatherService {
     @Autowired
     private RequestLogRepository requestLogRepository;
 
+    @Cacheable(value = "currentWeather", key ="#city")
     public WeatherResponse getCurrentWeather(String city){
         long startTime = System.currentTimeMillis();
 
@@ -31,6 +34,9 @@ class WeatherService {
 
             log.setSuccess(true);
             log.setResponseTimeMs(System.currentTimeMillis() - startTime);
+
+            System.out.println("CACHE MISS - Fetched from API: "+ city + "(" + log.getResponseTimeMs() + "ms)");
+
             return response;
         }
         catch(Exception e){
@@ -45,6 +51,7 @@ class WeatherService {
         }
     }
 
+    @Cacheable(value = "forecatWeather", key = "#city + '-' + #days" )
     public ForecastResponse getForecastWeather(String city, int days){
         long startTime = System.currentTimeMillis();
 
@@ -57,6 +64,9 @@ class WeatherService {
 
             log.setSuccess(true);
             log.setResponseTimeMs(System.currentTimeMillis()-startTime);
+
+            System.out.println("CACHE MISS - Fetched for API: "+ city + "for" + days + "days (" + log.getResponseTimeMs() + "ms)");
+
             return response;
         }
         catch(Exception e){
