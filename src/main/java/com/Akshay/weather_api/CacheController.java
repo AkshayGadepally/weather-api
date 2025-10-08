@@ -67,7 +67,7 @@ public class CacheController {
             }
         }
         HashMap<String, String> response = new HashMap<>();
-        response.put("message","All caches clared successfully.");
+        response.put("message","All caches cleared successfully.");
         response.put("status","success");
         return ResponseEntity.ok(response);
     }

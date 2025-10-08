@@ -51,7 +51,7 @@ class WeatherService {
         }
     }
 
-    @Cacheable(value = "forecatWeather", key = "#city + '-' + #days" )
+    @Cacheable(value = "forecastWeather", key = "#city + '-' + #days" )
     public ForecastResponse getForecastWeather(String city, int days){
         long startTime = System.currentTimeMillis();
 
