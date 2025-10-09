@@ -27,7 +27,15 @@ Comprehensive Error Handling - Clean JSON error responses
 
 
 🛠️ Tech Stack
-TechnologyPurposeSpring Boot 3.5.5REST API FrameworkPostgreSQLPrimary database for request loggingRedisCaching layer for performanceWeatherAPI.comWeather data providerBucket4jRate limiting implementationSwagger/OpenAPIAPI documentationMavenDependency management
+
+Technology          Purpose
+Spring Boot 3.5.5   REST API 
+Framework           PostgreSQLPrimary database for request logging
+Redis               Caching layer for performance
+WeatherAPI.com      Weather data provider
+Bucket4j            Rate limiting implementation
+Swagger/OpenAPI     API documentation
+Maven               Dependency management
 
 📋 Prerequisites
 
