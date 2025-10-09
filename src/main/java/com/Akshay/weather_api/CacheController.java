@@ -12,15 +12,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/cache")
+@Tag(name = "Cache Management", description = "Endopoints to manage and monitor Redis Cache")
 public class CacheController {
     
     @Autowired
     private CacheManager cacheManager;
 
     // For adding cache stats
+    @Operation(summary = "Stats endopoint", description = "View information about active caches") 
     @GetMapping("/stats")
     public ResponseEntity<Map<String,Object>> getCacheStats(){
         Map<String,Object> stats = new HashMap<>();
@@ -42,6 +47,7 @@ public class CacheController {
     }
 
     // Dor clearing a particular cache
+    @Operation(summary = "Clear specific cache", description = "Clear all entries from a specific cache")
     @DeleteMapping("/api/{cacheName}")
     public ResponseEntity<Map<String, String>> clearCache(@PathVariable String cacheName){
         Cache cache = cacheManager.getCache(cacheName);
@@ -58,6 +64,7 @@ public class CacheController {
             return ResponseEntity.badRequest().body(response);
     }
 
+    @Operation(summary = "Clear all caches", description = "Clear all cached data from Redis")
     @DeleteMapping("/clear-all")
     public ResponseEntity<Map<String,String>> clearAllCaches(){
         for(String cacheName : cacheManager.getCacheNames()){
