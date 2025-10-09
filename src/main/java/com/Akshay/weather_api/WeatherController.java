@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -22,6 +25,9 @@ public class WeatherController {
 
     @Autowired
     private WeatherService weatherService;
+
+    @Autowired
+    private RateLimiterService rateLimiterService;
 
     //Getting Current weather
     @GetMapping("/current")
@@ -56,11 +62,33 @@ public class WeatherController {
         }
     }
 
+    @GetMapping("/rate-limit-status")
+    public ResponseEntity<Map<String,Object>> getRateLimitStatus(HttpServletRequest request){
+        String ipAddress = getClientIp(request);
+        long remainingRequests = rateLimiterService.getAvailableTokens(ipAddress);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("ip_address", ipAddress);
+        response.put("remaining_requests", remainingRequests);
+        response.put("rate_limiter", "100 requests per hour");
+        response.put("status","active");
+
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/test")
     public ResponseEntity<Map<String, String>> test(){
         Map<String, String> response = new HashMap<>();
         response.put("message","Weather API is Working with PostgreSQL logging!");
         response.put("Status","Success");
         return ResponseEntity.ok(response);
+    }
+
+    public String getClientIp(HttpServletRequest request){
+        String xfHeader = request.getHeader("X-Forworder-for");
+        if(xfHeader == null || xfHeader.isEmpty()){
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0].trim();
     }
 }
