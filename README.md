@@ -252,8 +252,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 👨‍💻 Author
 Akshay
 
-GitHub: @yourusername
-Email: your.email@example.com
+GitHub: AkshayGadepally
+Email: gadepallyakshay1999@gmail.com
 
 
 🙏 Acknowledgments
@@ -268,7 +268,7 @@ PostgreSQL - Database system
 For issues, questions, or contributions:
 
 Open an issue on GitHub
-Email: your.email@example.com
+Email: gadepallyakshay1999@gmail.com
 Documentation: http://localhost:8080/swagger-ui.html
 
 
